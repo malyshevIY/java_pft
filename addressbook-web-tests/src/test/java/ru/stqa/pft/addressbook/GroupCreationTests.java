@@ -33,7 +33,7 @@ public class GroupCreationTests {
   public void testGroupCreation() throws Exception {
     gotoGroupPage();
     initGroupCreation();
-    fillGroupForm();
+    fillGroupForm(new GroupData("test111", "test222", "test333"));
     submitGroupCreation();
     returnToGroupCreation();
   }
@@ -46,14 +46,14 @@ public class GroupCreationTests {
     wd.findElement(By.name("submit")).click();
   }
 
-  private void fillGroupForm() {
+  private void fillGroupForm(GroupData groupData) {
     wd.findElement(By.name("group_name")).clear();
     wd.findElement(By.name("group_name")).click();
-    wd.findElement(By.name("group_name")).sendKeys("test111");
+    wd.findElement(By.name("group_name")).sendKeys(groupData.name());
     wd.findElement(By.name("group_header")).clear();
-    wd.findElement(By.name("group_header")).sendKeys("test222");
+    wd.findElement(By.name("group_header")).sendKeys(groupData.header());
     wd.findElement(By.name("group_footer")).clear();
-    wd.findElement(By.name("group_footer")).sendKeys("test333");
+    wd.findElement(By.name("group_footer")).sendKeys(groupData.footer());
   }
 
   private void initGroupCreation() {
