@@ -16,23 +16,23 @@ public class ContactCreationTests {
     wd = new ChromeDriver();
     wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
     wd.get("http://localhost/addressbook/index.php");
-    login();// Выделяем вспомогательный метод авторизации
+    login("admin", "secret");// Выделяем вспомогательный метод авторизации и параметезируем его
 
   }
 
-  private void login() {
+  private void login(String username, String password) {
     wd.findElement(By.name("user")).clear();
-    wd.findElement(By.name("user")).sendKeys("admin");
+    wd.findElement(By.name("user")).sendKeys(username);
     wd.findElement(By.name("pass")).click();
     wd.findElement(By.name("pass")).clear();
-    wd.findElement(By.name("pass")).sendKeys("secret");
+    wd.findElement(By.name("pass")).sendKeys(password);
     wd.findElement(By.xpath("//input[@value='Login']")).click();
   }
 
   @Test
   public void testContactCreation() throws Exception { // Тестовый метод переименован на testContactCreation
     gotoAddContact();// Выделяем вспомогательный метод перехода на страницу создания нового контакта
-    fillContactForm();// Выделяем вспомогательный метод заполнения формы нового контакта
+    fillContactForm(new ContactData("Ilya", "Malyshev", "100 WILLIAM STREET, SUITE 210", "admin@admin.test", "79999999999", "78888888888", "77777777777", "76666666666"));// Выделяем вспомогательный метод заполнения формы нового контакта
     submitContactCreation();// Сохраняем созданный контакт
     returnToHomePage();// Возвращаемся на домашнюю страницу
   }
@@ -44,24 +44,24 @@ public class ContactCreationTests {
   private void submitContactCreation() {
     wd.findElement(By.xpath("//div[@id='content']/form/input[21]")).click();
   }
-
-  private void fillContactForm() {
+  //Метод fillContactForm параметезирован.Параметры метода сгрупированы в объект, создан вспомогательный класс "модельный класс" GroupData для их представления
+  private void fillContactForm(ContactData contactData) {
     wd.findElement(By.name("firstname")).click();
-    wd.findElement(By.name("firstname")).sendKeys("Ilya");
+    wd.findElement(By.name("firstname")).sendKeys(contactData.firstName());
     wd.findElement(By.name("lastname")).click();
-    wd.findElement(By.name("lastname")).sendKeys("Malyshev");
+    wd.findElement(By.name("lastname")).sendKeys(contactData.lastName());
     wd.findElement(By.name("address")).click();
-    wd.findElement(By.name("address")).sendKeys("100 WILLIAM STREET, SUITE 210");
+    wd.findElement(By.name("address")).sendKeys(contactData.adress());
     wd.findElement(By.name("email")).click();
-    wd.findElement(By.name("email")).sendKeys("admin@admin.test");
+    wd.findElement(By.name("email")).sendKeys(contactData.email());
     wd.findElement(By.name("home")).click();
-    wd.findElement(By.name("home")).sendKeys("79999999999");
+    wd.findElement(By.name("home")).sendKeys(contactData.home());
     wd.findElement(By.name("mobile")).click();
-    wd.findElement(By.name("mobile")).sendKeys("78888888888");
+    wd.findElement(By.name("mobile")).sendKeys(contactData.mobile());
     wd.findElement(By.name("work")).click();
-    wd.findElement(By.name("work")).sendKeys("77777777777");
+    wd.findElement(By.name("work")).sendKeys(contactData.work());
     wd.findElement(By.name("fax")).click();
-    wd.findElement(By.name("fax")).sendKeys("76666666666");
+    wd.findElement(By.name("fax")).sendKeys(contactData.fax());
   }
 
   private void gotoAddContact() {
