@@ -3,6 +3,7 @@ package ru.stqa.pft.addressbook;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
+
 import java.util.concurrent.TimeUnit;
 
 
@@ -16,7 +17,6 @@ public class GroupCreationTests {
     wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
     wd.get("http://localhost/addressbook/group.php");
     login("admin", "secret");
-
   }
 
   private void login(String username, String password) {
@@ -65,7 +65,6 @@ public class GroupCreationTests {
   @AfterMethod(alwaysRun = true)
   public void tearDown() throws Exception {
     wd.quit();
-
   }
 
   private boolean isElementPresent(By by) {

@@ -1,79 +1,82 @@
 package ru.stqa.pft.addressbook;
 
 import java.util.concurrent.TimeUnit;
+
 import org.testng.annotations.*;
-import static org.testng.Assert.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 // Создан класс ContactCreationTests, содержащий тест для создания нового контакта
 public class ContactCreationTests {
-  private WebDriver driver;
-  private String baseUrl;
-  private boolean acceptNextAlert = true;
-  private StringBuffer verificationErrors = new StringBuffer();
-  private JavascriptExecutor js;
+  private WebDriver wd;// Переименована переменная, хранящая ссылку на драйвер
 
-  @BeforeClass(alwaysRun = true)
+  //Превращаем класс BeforeClass в метод BeforeMethod в соответствии с анатацией Selenium IDE
+  @BeforeMethod(alwaysRun = true)
   public void setUp() throws Exception {
-    System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-    driver = new ChromeDriver();
-    baseUrl = "https://www.google.com/";
-    driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-    js = (JavascriptExecutor) driver;
+    wd = new ChromeDriver();
+    wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+    wd.get("http://localhost/addressbook/index.php");
+    login();// Выделяем вспомогательный метод авторизации
+
+  }
+
+  private void login() {
+    wd.findElement(By.name("user")).clear();
+    wd.findElement(By.name("user")).sendKeys("admin");
+    wd.findElement(By.name("pass")).click();
+    wd.findElement(By.name("pass")).clear();
+    wd.findElement(By.name("pass")).sendKeys("secret");
+    wd.findElement(By.xpath("//input[@value='Login']")).click();
   }
 
   @Test
-  public void testContactCreationTests() throws Exception {
-    driver.get("http://localhost/addressbook/index.php");
-    driver.findElement(By.name("user")).clear();
-    driver.findElement(By.name("user")).sendKeys("admin");
-    driver.findElement(By.name("pass")).click();
-    driver.findElement(By.name("pass")).clear();
-    driver.findElement(By.name("pass")).sendKeys("secret");
-    driver.findElement(By.xpath("//input[@value='Login']")).click();
-    driver.findElement(By.linkText("add new")).click();
-    driver.findElement(By.name("firstname")).click();
-    driver.findElement(By.name("firstname")).clear();
-    driver.findElement(By.name("firstname")).sendKeys("Ilya");
-    driver.findElement(By.name("lastname")).click();
-    driver.findElement(By.name("lastname")).clear();
-    driver.findElement(By.name("lastname")).sendKeys("Malyshev");
-    driver.findElement(By.name("address")).click();
-    driver.findElement(By.name("address")).clear();
-    driver.findElement(By.name("address")).sendKeys("100 WILLIAM STREET, SUITE 210");
-    driver.findElement(By.name("email")).click();
-    driver.findElement(By.name("email")).clear();
-    driver.findElement(By.name("email")).sendKeys("admin@admin.test");
-    driver.findElement(By.name("home")).click();
-    driver.findElement(By.name("home")).clear();
-    driver.findElement(By.name("home")).sendKeys("79999999999");
-    driver.findElement(By.name("mobile")).click();
-    driver.findElement(By.name("mobile")).clear();
-    driver.findElement(By.name("mobile")).sendKeys("78888888888");
-    driver.findElement(By.name("work")).click();
-    driver.findElement(By.name("work")).clear();
-    driver.findElement(By.name("work")).sendKeys("77777777777");
-    driver.findElement(By.name("fax")).click();
-    driver.findElement(By.name("fax")).clear();
-    driver.findElement(By.name("fax")).sendKeys("76666666666");
-    driver.findElement(By.xpath("//div[@id='content']/form/input[21]")).click();
-    driver.findElement(By.linkText("home")).click();
-    driver.findElement(By.linkText("Logout")).click();
+  public void testContactCreation() throws Exception { // Тестовый метод переименован на testContactCreation
+    gotoAddContact();// Выделяем вспомогательный метод перехода на страницу создания нового контакта
+    fillContactForm();// Выделяем вспомогательный метод заполнения формы нового контакта
+    submitContactCreation();// Сохраняем созданный контакт
+    returnToHomePage();// Возвращаемся на домашнюю страницу
   }
 
-  @AfterClass(alwaysRun = true)
+  private void returnToHomePage() {
+    wd.findElement(By.linkText("home")).click();
+  }
+
+  private void submitContactCreation() {
+    wd.findElement(By.xpath("//div[@id='content']/form/input[21]")).click();
+  }
+
+  private void fillContactForm() {
+    wd.findElement(By.name("firstname")).click();
+    wd.findElement(By.name("firstname")).sendKeys("Ilya");
+    wd.findElement(By.name("lastname")).click();
+    wd.findElement(By.name("lastname")).sendKeys("Malyshev");
+    wd.findElement(By.name("address")).click();
+    wd.findElement(By.name("address")).sendKeys("100 WILLIAM STREET, SUITE 210");
+    wd.findElement(By.name("email")).click();
+    wd.findElement(By.name("email")).sendKeys("admin@admin.test");
+    wd.findElement(By.name("home")).click();
+    wd.findElement(By.name("home")).sendKeys("79999999999");
+    wd.findElement(By.name("mobile")).click();
+    wd.findElement(By.name("mobile")).sendKeys("78888888888");
+    wd.findElement(By.name("work")).click();
+    wd.findElement(By.name("work")).sendKeys("77777777777");
+    wd.findElement(By.name("fax")).click();
+    wd.findElement(By.name("fax")).sendKeys("76666666666");
+  }
+
+  private void gotoAddContact() {
+    wd.findElement(By.linkText("add new")).click();
+  }
+
+  //Превращаем класс AfterClass в метод AfterMethod в соответствии с анатацией Selenium IDE
+  @AfterMethod(alwaysRun = true)
   public void tearDown() throws Exception {
-    driver.quit();
-    String verificationErrorString = verificationErrors.toString();
-    if (!"".equals(verificationErrorString)) {
-      fail(verificationErrorString);
-    }
+    wd.quit();
   }
 
   private boolean isElementPresent(By by) {
     try {
-      driver.findElement(by);
+      wd.findElement(by);
       return true;
     } catch (NoSuchElementException e) {
       return false;
@@ -82,25 +85,11 @@ public class ContactCreationTests {
 
   private boolean isAlertPresent() {
     try {
-      driver.switchTo().alert();
+      wd.switchTo().alert();
       return true;
     } catch (NoAlertPresentException e) {
       return false;
     }
   }
 
-  private String closeAlertAndGetItsText() {
-    try {
-      Alert alert = driver.switchTo().alert();
-      String alertText = alert.getText();
-      if (acceptNextAlert) {
-        alert.accept();
-      } else {
-        alert.dismiss();
-      }
-      return alertText;
-    } finally {
-      acceptNextAlert = true;
-    }
-  }
 }
