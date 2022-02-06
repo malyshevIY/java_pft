@@ -31,4 +31,29 @@ public class ContactHelper extends HelperBase {
     type(By.name("work"), contactData.telephoneWork());
     type(By.name("fax"), contactData.telephoneFax());
   }
+
+    // Метод выбора контакта
+  public void selectContact() {
+    click(By.xpath("//table[@id='maintable']/tbody/tr[2]/td/input"));
+  }
+
+  // Метод удаления выбранного контакта/контактов
+  public void deleteSelectedContacts() {
+    click(By.xpath("//input[@value='Delete']"));
+  }
+
+  // Метод скрытия диалогового окна
+  public void closeAlert() {
+    wd.switchTo().alert().accept();
+
+  }
+
+  // Метод перехода на форму модицификации контакта
+  public void initContactModification() {
+    click(By.xpath("//img[@alt='Edit']"));
+  }
+
+  public void submitContactModification() {
+    click(By.xpath("//div[@id='content']/form/input[22]"));
+  }
 }

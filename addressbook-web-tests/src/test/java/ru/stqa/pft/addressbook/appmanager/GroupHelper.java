@@ -37,8 +37,18 @@ public class GroupHelper extends HelperBase {
     click(By.name("delete"));
   }
 
-  // Метод выбора группы
+  // Метод выбора группы/групп
   public void selectGroup() {
     click(By.name("selected[]"));
+  }
+
+  // Метод переход на форму модификации группы
+  public void initGroupModification() {
+    click(By.name("edit"));
+  }
+
+  // Метод сохранения формы после модификации группы
+  public void submitGroupModification() {
+    click(By.name("update"));
   }
 }

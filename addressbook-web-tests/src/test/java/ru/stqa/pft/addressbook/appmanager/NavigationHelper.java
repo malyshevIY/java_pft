@@ -18,4 +18,9 @@ public class NavigationHelper extends HelperBase {
   public void gotoAddContact() {
     click(By.linkText("add new"));
   }
+
+  // Метода перехода на домашнюю страницу по ссылке в меню
+  public void gotoHomePage() {
+    click(By.linkText("home"));
+  }
 }
