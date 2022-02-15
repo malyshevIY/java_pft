@@ -11,14 +11,24 @@ public class HelperBase {
     this.wd = wd;
   }
 
+  // Метод клика
   protected void click(By locator) {
     wd.findElement(locator).click();
   }
 
+  // Метод заполнения текстового поля
   protected void type(By locator, String text) {
     click(locator);
-    wd.findElement(locator).clear();
-    wd.findElement(locator).sendKeys(text);
+    // Оптимизация текстовых полей - Предоставление возможности оставлять значения по умолчания (null)
+    if (text != null) {
+      // Извлекаем значение, хранимое в поле ввода
+      String existingText = wd.findElement(locator).getAttribute("value");
+      // Оптимизация текстовых полей - Проверка совпадения значений в полях ввода
+      if (! text.equals(existingText)) {
+        wd.findElement(locator).clear();
+        wd.findElement(locator).sendKeys(text);
+      }
+    }
   }
 
   public boolean isAlertPresent() {

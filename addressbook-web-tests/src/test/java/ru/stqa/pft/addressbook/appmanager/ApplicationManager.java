@@ -6,7 +6,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.safari.SafariDriver;
 
-import javax.sql.rowset.BaseRowSet;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
