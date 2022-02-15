@@ -2,6 +2,8 @@ package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 
 public class ContactHelper extends HelperBase {
@@ -21,18 +23,25 @@ public class ContactHelper extends HelperBase {
   }
 
   // Метод заполнения формы нового контакта
-  public void fillContactForm(ContactData contactData) {
+  public void fillContactForm(ContactData contactData, boolean creation) {
     type(By.name("firstname"), contactData.firstName());
     type(By.name("lastname"), contactData.lastName());
     type(By.name("address"), contactData.adress());
     type(By.name("email"), contactData.email());
     type(By.name("home"), contactData.telephoneHome());
-    type(By.name("mobile"), contactData.telephoneMobile() );
+    type(By.name("mobile"), contactData.telephoneMobile());
     type(By.name("work"), contactData.telephoneWork());
     type(By.name("fax"), contactData.telephoneFax());
+
+    // Метод проверки на наличие/отсутствие элемента выбора группы на странице создания и модификации контакта
+    if (creation) {
+      new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.group());
+    } else {
+      Assert.assertFalse(isElementPresent(By.name("new_group")));
+    }
   }
 
-    // Метод выбора контакта
+  // Метод выбора контакта
   public void selectContact() {
     click(By.xpath("//table[@id='maintable']/tbody/tr[2]/td/input"));
   }
