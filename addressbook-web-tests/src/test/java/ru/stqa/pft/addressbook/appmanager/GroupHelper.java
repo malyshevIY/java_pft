@@ -60,6 +60,7 @@ public class GroupHelper extends HelperBase {
     returnToGroupPage();
   }
 
+  // Метод проверки элемента выбора группы/групп
   public boolean isTheAGroup() {
     return isElementPresent(By.name("selected[]"));
   }
