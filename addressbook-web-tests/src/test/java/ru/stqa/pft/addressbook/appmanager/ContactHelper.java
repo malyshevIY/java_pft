@@ -1,6 +1,7 @@
 package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
@@ -26,16 +27,16 @@ public class ContactHelper extends HelperBase {
   public void fillContactForm(ContactData contactData, boolean creation) {
     type(By.name("firstname"), contactData.firstName());
     type(By.name("lastname"), contactData.lastName());
-    type(By.name("address"), contactData.adress());
+    type(By.name("address"), contactData.address());
     type(By.name("email"), contactData.email());
     type(By.name("home"), contactData.telephoneHome());
     type(By.name("mobile"), contactData.telephoneMobile());
     type(By.name("work"), contactData.telephoneWork());
     type(By.name("fax"), contactData.telephoneFax());
 
-    // Метод проверки на наличие/отсутствие элемента выбора группы на странице создания и модификации контакта
+    // Условие проверки на наличие/отсутствие элемента выбора группы на странице создания и модификации контакта
     if (creation) {
-      new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.group());
+      selectedGroupForContact(contactData.group());
     } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
@@ -62,16 +63,40 @@ public class ContactHelper extends HelperBase {
     click(By.xpath("//img[@alt='Edit']"));
   }
 
+  // Метод подтверждения изменений при модификации контакта
   public void submitContactModification() {
     click(By.xpath("//div[@id='content']/form/input[22]"));
   }
 
-  public void createContact(ContactData contact, boolean bool) {
-    fillContactForm(contact, bool);
+  // Метод создания контакта
+  public void createContact(ContactData contact) {
+    type(By.name("firstname"), contact.firstName());
+    type(By.name("lastname"), contact.lastName());
+    type(By.name("address"), contact.address());
+    type(By.name("email"), contact.email());
+    type(By.name("home"), contact.telephoneHome());
+    type(By.name("mobile"), contact.telephoneMobile());
+    type(By.name("work"), contact.telephoneWork());
+    type(By.name("fax"), contact.telephoneFax());
+    selectedGroupForContact(contact.group());
     submitContactCreation();
     returnToHomePage();
   }
 
+  // Метод селекта группы для контакта (по тексту) с проверкой исключений
+  public boolean selectedGroupForContact(String group) {
+    Select newGroup = new Select(wd.findElement(By.name("new_group")));
+
+    try {
+      newGroup.selectByVisibleText(group);
+      return true;
+    }
+    catch (NoSuchElementException ex) {
+      return false;
+    }
+  }
+
+  // Метод проверки элементов выбора контакта для удаления и модификации
   public boolean isTheAContact() {
     return isElementPresent(By.xpath("//table[@id='maintable']/tbody/tr[2]/td/input"))
             || isElementPresent(By.xpath("//img[@alt='Edit']"));
