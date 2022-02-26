@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 public class ContactHelper extends HelperBase {
 
@@ -25,18 +26,18 @@ public class ContactHelper extends HelperBase {
 
   // Метод заполнения формы нового контакта
   public void fillContactForm(ContactData contactData, boolean creation) {
-    type(By.name("firstname"), contactData.firstName());
-    type(By.name("lastname"), contactData.lastName());
-    type(By.name("address"), contactData.address());
-    type(By.name("email"), contactData.email());
-    type(By.name("home"), contactData.telephoneHome());
-    type(By.name("mobile"), contactData.telephoneMobile());
-    type(By.name("work"), contactData.telephoneWork());
-    type(By.name("fax"), contactData.telephoneFax());
+    type(By.name("firstname"), contactData.getFirstName());
+    type(By.name("lastname"), contactData.getLastName());
+    type(By.name("address"), contactData.getAddress());
+    type(By.name("email"), contactData.getEmail());
+    type(By.name("home"), contactData.getTelephoneHome());
+    type(By.name("mobile"), contactData.getTelephoneMobile());
+    type(By.name("work"), contactData.getTelephoneWork());
+    type(By.name("fax"), contactData.getTelephoneFax());
 
     // Условие проверки на наличие/отсутствие элемента выбора группы на странице создания и модификации контакта
     if (creation) {
-      selectedGroupForContact(contactData.group());
+      selectedGroupForContact(contactData.getGroup());
     } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
@@ -69,16 +70,16 @@ public class ContactHelper extends HelperBase {
   }
 
   // Метод создания контакта
-  public void createContact(ContactData contact) {
-    type(By.name("firstname"), contact.firstName());
-    type(By.name("lastname"), contact.lastName());
-    type(By.name("address"), contact.address());
-    type(By.name("email"), contact.email());
-    type(By.name("home"), contact.telephoneHome());
-    type(By.name("mobile"), contact.telephoneMobile());
-    type(By.name("work"), contact.telephoneWork());
-    type(By.name("fax"), contact.telephoneFax());
-    selectedGroupForContact(contact.group());
+  public void createContact(ContactData contact, GroupData groupData) {
+    type(By.name("firstname"), contact.getFirstName());
+    type(By.name("lastname"), contact.getLastName());
+    type(By.name("address"), contact.getAddress());
+    type(By.name("email"), contact.getEmail());
+    type(By.name("home"), contact.getTelephoneHome());
+    type(By.name("mobile"), contact.getTelephoneMobile());
+    type(By.name("work"), contact.getTelephoneWork());
+    type(By.name("fax"), contact.getTelephoneFax());
+    selectedGroupForContact(groupData.getName());
     submitContactCreation();
     returnToHomePage();
   }

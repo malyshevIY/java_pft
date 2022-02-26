@@ -22,9 +22,9 @@ public class GroupHelper extends HelperBase {
 
   // Метод заполения формы группы
   public void fillGroupForm(GroupData groupData) {
-    type(By.name("group_name"), groupData.name());
-    type(By.name("group_header"), groupData.header());
-    type(By.name("group_footer"), groupData.footer());
+    type(By.name("group_name"), groupData.getName());
+    type(By.name("group_header"), groupData.getHeader());
+    type(By.name("group_footer"), groupData.getFooter());
   }
 
   // Метод перехода на страницу создания новой группы
